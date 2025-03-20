@@ -6,6 +6,7 @@ import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
+import gzip
 
 # Configuração da página
 st.set_page_config(
@@ -14,10 +15,13 @@ st.set_page_config(
     layout="wide"
 )
 
+with gzip.open('acidentes2024.csv.gz', 'rb') as f:
+    data = pd.read_csv(f, encoding='latin1', sep=';', decimal=',')
+
 # Função para carregar os dados
 @st.cache_data
 def load_data():
-    df = pd.read_csv("acidentes2024.csv", encoding='latin1', sep=';', decimal=',')
+    df = data.copy()
     # Verificar se a coluna 'data_inversa' existe
     if 'data_inversa' in df.columns:
         # Conversão de data_inversa para datetime
