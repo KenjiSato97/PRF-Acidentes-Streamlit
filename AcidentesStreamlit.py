@@ -21,14 +21,14 @@ with gzip.open('acidentes2024.csv.gz', 'rb') as f:
 # Função para carregar os dados
 @st.cache_data
 def load_data():
-    df = data.copy()
+    df = data.copy(deep=True)
     # Verificar se a coluna 'data_inversa' existe
     if 'data_inversa' in df.columns:
         # Conversão de data_inversa para datetime
-        df['data'] = pd.to_datetime(df['data_inversa'], format='%Y-%m-%d', errors='coerce')
-        df['ano'] = df['data'].dt.year
-        df['mes'] = df['data'].dt.month
-        df['mes_nome'] = df['data'].dt.month_name()
+        df.loc[:, 'data'] = pd.to_datetime(df['data_inversa'], format='%Y-%m-%d', errors='coerce')
+        df.loc[:, 'ano'] = df['data'].dt.year
+        df.loc[:, 'mes'] = df['data'].dt.month
+        df.loc[:, 'mes_nome'] = df['data'].dt.month_name()
     else:
         st.error("A coluna 'data_inversa' não foi encontrada no arquivo.")
         st.stop()
